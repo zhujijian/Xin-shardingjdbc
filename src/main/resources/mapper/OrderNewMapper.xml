@@ -11,7 +11,23 @@
             t.order_id as orderId,
             t.user_name as userName
         from t_new_order t
-        where t.user_id=#{userId}
+        where 1=1
+        <if test="orderId != null and orderId != ''">
+            and  t.order_id=#{orderId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id=#{userId}
+        </if>
+        <if test="orderIds != null and orderIds.size() &gt; 0">
+            <foreach collection="orderIds" item="data" open="and t.order_id in (" close=")" separator=",">
+                #{data,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="userIds != null and userIds.size() &gt; 0">
+            <foreach collection="userIds" item="data" open="and t.user_id in (" close=")" separator=",">
+                #{data,jdbcType=VARCHAR}
+            </foreach>
+        </if>
 	</select>
 
     <select id="queryOrderInfoByOrderId" parameterType="com.snowalker.shardingjdbc.snowalker.demo.complex.sharding.entity.OrderNewInfoEntity"
@@ -22,8 +38,23 @@
             t.order_id as orderId,
             t.user_name as userName
         from t_new_order t
-        where t.order_id=#{orderId}
-        and t.user_id=#{userId}
+        where 1=1
+        <if test="orderId != null and orderId != ''">
+            and  t.order_id=#{orderId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id=#{userId}
+        </if>
+        <if test="orderIds != null and orderIds.size() &gt; 0">
+            <foreach collection="orderIds" item="data" open="and t.order_id in (" close=")" separator=",">
+                #{data,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="userIds != null and userIds.size() &gt; 0">
+            <foreach collection="userIds" item="data" open="and t.user_id in (" close=")" separator=",">
+                #{data,jdbcType=VARCHAR}
+            </foreach>
+        </if>
 	</select>
 
     <!--订单入库-->

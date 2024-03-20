@@ -30,9 +30,9 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
     @Test
     public void testInsertOrderInfo() {
         for (int i = 0; i < 1000; i++) {
-            long userId = 4*i;
+            long userId = i + 1;
 //            long orderId = KeyGenerator.getKey();
-            long orderId = 4*i + 1;
+            long orderId = i + 1;
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setUserName("snowalker");
             orderInfo.setUserId(userId);
@@ -81,7 +81,7 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
      */
     @Test
     public void testGenerateId() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             // 支付宝或者微信uid
             String outId = "1232132131241241243123" + i;
             LOGGER.info("获取id开始");
@@ -103,7 +103,7 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
     @Test
     public void testNewOrderInsert() {
         // 支付宝或者微信uid
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             String outId = "1232132131241241243126" + i;
             LOGGER.info("获取id开始");
             String innerUserId = keyGenerator.generateKey(DbAndTableEnum.T_USER, outId);
@@ -124,12 +124,24 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
      */
     @Test
     public void testQueryNewOrderById() {
-        String orderId = "OD010001011903261549424993200011";
-        String userId = "UD030001011903261549424973200007";
+//        String orderId = "OD030001012403160040094480801540";
+        String userId = "UD030002012403160040094470800647";
         OrderNewInfoEntity orderInfo = new OrderNewInfoEntity();
-        orderInfo.setOrderId(orderId);
-        orderInfo.setUserId(userId);
-        System.out.println(orderNewSerivce.queryOrderInfoByOrderId(orderInfo));
+//        orderInfo.setOrderId(orderId);
+
+//        orderInfo.setUserId(userId);
+        List<String> orderIds = new ArrayList<>();
+        orderIds.add("OD030001012403160040090740801534");
+        orderIds.add("OD030001012403160040092960801535");
+        orderIds.add("OD020000012403160040090660802430");
+
+//        List<String> userIds = new ArrayList<>();
+//        userIds.add("UD020002012403160040090720800473");
+//        userIds.add("UD010000012403160040092950800833");
+//        userIds.add("UD020001012403160040090640803630");
+//        orderInfo.setUserIds(userIds);
+        orderInfo.setOrderIds(orderIds);
+        System.out.println(orderNewSerivce.queryOrderInfoList(orderInfo));
     }
 
     /**

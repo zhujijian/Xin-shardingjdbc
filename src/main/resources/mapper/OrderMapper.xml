@@ -11,7 +11,13 @@
             t.order_id as orderId,
             t.user_name as userName
         from t_order t
-        where t.user_id=#{userId}
+        where 1=1
+        <if test="orderId != null and orderId != ''">
+            and  t.order_id=#{orderId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id=#{userId}
+        </if>
 	</select>
 
     <select id="queryOrderInfoByOrderId" parameterType="com.snowalker.shardingjdbc.snowalker.demo.entity.OrderInfo"
@@ -22,8 +28,14 @@
             t.order_id as orderId,
             t.user_name as userName
         from t_order t
-        where t.order_id=#{orderId}
-        and t.user_id=#{userId}
+        where 1=1
+        <if test="orderId != null and orderId != ''">
+          and  t.order_id=#{orderId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id=#{userId}
+        </if>
+
 	</select>
 
     <!--订单入库-->

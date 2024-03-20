@@ -1,5 +1,7 @@
 package com.snowalker.shardingjdbc.snowalker.demo.complex.sharding.entity;
 
+import java.util.List;
+
 /**
  * @author snowalker
  * @version 1.0
@@ -13,6 +15,26 @@ public class OrderNewInfoEntity {
     private String userId;
     private String orderId;
     private String userName;
+
+    private List<String> orderIds;
+
+    private List<String> userIds;
+
+    public List<String> getOrderIds() {
+        return orderIds;
+    }
+
+    public void setOrderIds(List<String> orderIds) {
+        this.orderIds = orderIds;
+    }
+
+    public List<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<String> userIds) {
+        this.userIds = userIds;
+    }
 
     public Integer getId() {
         return id;

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class SnoWalkerComplexShardingDB implements ComplexKeysShardingAlgorithm 
         //进入通用复杂分片算法-抽象类-数据库路由：availableTargetNames=["ds0","ds1","ds2","ds3"],
         //shardingValues=[{"columnName":"user_id","logicTableName":"order_info","values":["UD000000011902261230103345300002"]},
         // {"columnName":"order_id","logicTableName":"order_info","values":["OD020000011902261234512595300002"]}]
-        List<String> shardingResults = new ArrayList<>();
+        Collection<String> shardingResults = new HashSet<>();
 
         for (ShardingValue var : shardingValues) {
 
@@ -48,24 +49,31 @@ public class SnoWalkerComplexShardingDB implements ComplexKeysShardingAlgorithm 
             log.info("shardingValue:" + JSON.toJSONString(shardingValue));
 
             //根据列名获取索引规则，得到索引值
-            String index = getIndex(listShardingValue.getLogicTableName(),
-                                    listShardingValue.getColumnName(),
-                                    shardingValue.get(0));
+            List<String> idx = new ArrayList<>();
+            for (String s:shardingValue) {
+                String index = getIndex(listShardingValue.getLogicTableName(),
+                        listShardingValue.getColumnName(),s);
+                idx.add(index);
+            }
+
 
             //循环匹配数据源
             for (String name : availableTargetNames) {
                 //获取逻辑数据源索引后缀
                 String nameSuffix = name.substring(ShardingConstant.LOGIC_DB_PREFIX_LENGTH);
-                if (nameSuffix.equals(index)) {
-                    shardingResults.add(name);
-                    break;
+                for (String index:idx) {
+                    if (nameSuffix.equals(index)) {
+                        shardingResults.add(name);
+                        break;
+                    }
                 }
+
             }
 
-            //匹配到一种路由规则就可以退出
-            if (shardingResults.size() > 0) {
-                break;
-            }
+//            //匹配到一种路由规则就可以退出
+//            if (shardingResults.size() > 0) {
+//                break;
+//            }
         }
 
         return shardingResults;

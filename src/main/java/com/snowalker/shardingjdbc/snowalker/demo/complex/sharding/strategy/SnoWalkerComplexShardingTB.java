@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class SnoWalkerComplexShardingTB implements ComplexKeysShardingAlgorithm 
         //进入通用复杂分片算法-抽象类-表路由：availableTargetNames=["order_info_0000","order_info_0001"],shardingValues=[{"columnName":"user_id","logicTableName":"order_info","values":["UD000000011902261230103345300002"]},{"columnName":"order_id","logicTableName":"order_info","values":["OD020000011902261234512595300002"]}]
         //availableTargetNames:["t_new_order_0000","t_new_order_0001"],
         // shardingValues:[{"columnName":"order_id","logicTableName":"t_new_order","values":["OD010001011903261549424993200011"]},{"columnName":"user_id","logicTableName":"t_new_order","values":["UD030001011903261549424973200007"]}]
-        Collection<String> collection = new ArrayList<>();
+        Collection<String> collection = new HashSet<>();
 
         for (ShardingValue var : shardingValues) {
             ListShardingValue<String> listShardingValue = (ListShardingValue<String>)var;
@@ -41,18 +42,24 @@ public class SnoWalkerComplexShardingTB implements ComplexKeysShardingAlgorithm 
             log.info("shardingValue:" + JSON.toJSONString(shardingValue));
 
             //根据列名获取索引规则，得到索引值
-            String index = getIndex(listShardingValue.getLogicTableName(),listShardingValue.getColumnName(),shardingValue.get(0));
+            List<String> idxs = new ArrayList<>();
+            for (String s:shardingValue) {
+                String index = getIndex(listShardingValue.getLogicTableName(), listShardingValue.getColumnName(), s);
+                idxs.add(index);
+            }
             //循环匹配数据表源
             for (String availableTargetName : availableTargetNames){
-                if (availableTargetName.endsWith("_"+index)) {
-                    collection.add(availableTargetName);
-                    break;
+                for (String index: idxs) {
+                    if (availableTargetName.endsWith("_"+index)) {
+                        collection.add(availableTargetName);
+                        break;
+                    }
                 }
             }
             //匹配到一种路由规则就可以退出
-            if (collection.size() > 0) {
-                break;
-            }
+//            if (collection.size() > 0) {
+//                break;
+//            }
         }
         return collection;
     }
