@@ -13,7 +13,10 @@
         from t_new_order t
         where 1=1
         <if test="orderId != null and orderId != ''">
-            and  t.order_id=#{orderId}
+            and  t.order_id = #{orderId}
+        </if>
+        <if test="userName != null and userName != ''">
+            and  t.user_name = #{userName}
         </if>
         <if test="userId != null and userId != ''">
             and t.user_id=#{userId}

@@ -125,22 +125,24 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
     @Test
     public void testQueryNewOrderById() {
 //        String orderId = "OD030001012403160040094480801540";
-        String userId = "UD030002012403160040094470800647";
+//        String userId = "UD030002012403160040094470800647";
         OrderNewInfoEntity orderInfo = new OrderNewInfoEntity();
 //        orderInfo.setOrderId(orderId);
 
 //        orderInfo.setUserId(userId);
-        List<String> orderIds = new ArrayList<>();
-        orderIds.add("OD030001012403160040090740801534");
-        orderIds.add("OD030001012403160040092960801535");
-        orderIds.add("OD020000012403160040090660802430");
+//        List<String> orderIds = new ArrayList<>();
+//        orderIds.add("OD030001012403160040090740801534");
+//        orderIds.add("OD030001012403160040092960801535");
+//        orderIds.add("OD020000012403160040090660802430");
 
-//        List<String> userIds = new ArrayList<>();
-//        userIds.add("UD020002012403160040090720800473");
-//        userIds.add("UD010000012403160040092950800833");
-//        userIds.add("UD020001012403160040090640803630");
-//        orderInfo.setUserIds(userIds);
-        orderInfo.setOrderIds(orderIds);
+        List<String> userIds = new ArrayList<>();
+        userIds.add("UD020002012403160040090720800473");
+        userIds.add("UD010000012403160040092950800833");
+        userIds.add("UD020001012403160040090640803630");
+        userIds.add("UD030002012403160040094470800647");
+        orderInfo.setUserIds(userIds);
+//        orderInfo.setOrderIds(orderIds);
+//        orderInfo.setUserName("lisi");
         System.out.println(orderNewSerivce.queryOrderInfoList(orderInfo));
     }
 
