@@ -5,7 +5,11 @@ import com.snowalker.shardingjdbc.snowalker.demo.complex.sharding.entity.OrderNe
 import com.snowalker.shardingjdbc.snowalker.demo.complex.sharding.sequence.KeyGenerator;
 import com.snowalker.shardingjdbc.snowalker.demo.complex.sharding.service.OrderNewSerivce;
 import com.snowalker.shardingjdbc.snowalker.demo.entity.OrderInfo;
+import com.snowalker.shardingjdbc.snowalker.demo.reds.delay.enums.ConsumerTypeEnum;
+import com.snowalker.shardingjdbc.snowalker.demo.reds.delay.service.RedisDelayQueueService;
+import com.snowalker.shardingjdbc.snowalker.demo.reds.enrity.Task;
 import com.snowalker.shardingjdbc.snowalker.demo.service.OrderService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,7 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,6 +32,24 @@ public class SnowalkerShardingjdbcDemoApplicationTests {
 
     @Resource(name = "orderService")
     OrderService orderService;
+    @Resource
+    RedisDelayQueueService redisDelayQueueService;
+
+
+    @Test
+    public void testRedis(){
+        Task task = new Task();
+        String str = UUID.randomUUID().toString();
+        String s = str.replaceAll("-", "");
+        System.out.println(s);
+        Date date = DateUtils.addMilliseconds(new Date(), 10);
+        task.setBody(s);
+        task.setTaskId(s);
+        task.setTopic(ConsumerTypeEnum.BIDSPECSTART.name());
+        task.setRetry(1);
+        task.setDelay(date.getTime());
+        redisDelayQueueService.addTask(task);
+    }
 
     @Test
     public void testInsertOrderInfo() {
