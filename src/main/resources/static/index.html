@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE Example</title>
+</head>
+<body>
+<h1>xiaoxifasongshilie</h1>
+<div id="messages"></div>
+<script>
+    var source = new EventSource('base/connect/lisi');
+    source.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        console.log(data)
+        document.getElementById('messages').innerHTML += '<p>ID: ' + data.id + ', 消息: ' + data.data + '</p>';
+    };
+</script>
+</body>
+</html>
